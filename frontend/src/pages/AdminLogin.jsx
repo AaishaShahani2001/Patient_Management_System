@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import background from '../assets/pms.jpeg'
 import profileIcon from '../assets/profile_icon.png'
+import { getSession, login } from '../auth'
 
 const fieldClass =
   'h-11 w-full rounded-lg border border-slate-200 bg-white text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#2F6FED] focus:ring-2 focus:ring-[#2F6FED]/20'
@@ -25,12 +26,27 @@ function LockIcon() {
 }
 
 export default function AdminLogin() {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const session = getSession()
+    if (session?.role === 'admin') navigate('/admin-dashboard', { replace: true })
+    if (session?.role === 'patient') navigate('/patient-dashboard', { replace: true })
+  }, [navigate])
 
   function handleSubmit(event) {
     event.preventDefault()
+    const user = login(email, password, 'admin')
+    if (!user) {
+      setError('Invalid email or password.')
+      return
+    }
+    setError('')
+    navigate('/admin-dashboard')
   }
 
   return (
@@ -89,12 +105,16 @@ export default function AdminLogin() {
           </button>
         </div>
 
+        {error && <p className="mt-3 text-left text-[13px] text-red-600">{error}</p>}
+
         <button
           type="submit"
           className="mt-5 h-11 w-full rounded-lg bg-[#2F6FED] text-sm font-semibold text-white shadow-[0_8px_18px_rgba(47,111,237,0.35)] transition hover:bg-[#245ee0]"
         >
           Login
         </button>
+
+        <p className="mt-3 text-[12px] text-slate-400">Demo: admin@medicare.com / admin123</p>
 
         <div className="my-5 flex items-center gap-3 text-[11px] tracking-wide text-slate-400">
           <span className="h-px flex-1 bg-slate-200" />
