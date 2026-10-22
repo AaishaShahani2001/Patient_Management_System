@@ -1,6 +1,11 @@
+// Demo login stored in the browser. Passwords stay in localStorage for this student project only.
+
+// All saved accounts.
 const USERS_KEY = 'medicareUsers'
+// The person who is signed in right now. The password is not stored here.
 const SESSION_KEY = 'medicareUser'
 
+// One patient and one admin, added the first time the app loads.
 const defaultUsers = [
   {
     name: 'Riya Sharma',
@@ -16,6 +21,7 @@ const defaultUsers = [
   },
 ]
 
+// Adds the demo patient and admin when those emails are not already saved.
 export function ensureUsers() {
   const stored = readJson(USERS_KEY, [])
   const emails = new Set(stored.map((user) => user.email.toLowerCase()))
@@ -31,10 +37,12 @@ export function ensureUsers() {
   return users
 }
 
+// Returns every saved account, including the demo ones.
 export function getUsers() {
   return ensureUsers()
 }
 
+// Matches email, password, and role. Saves name, email, and role when the login succeeds.
 export function login(email, password, role) {
   const match = ensureUsers().find(
     (user) =>
@@ -45,19 +53,23 @@ export function login(email, password, role) {
 
   if (!match) return null
 
+  // Session keeps the name and role only. The password is left out.
   const session = { name: match.name, email: match.email, role: match.role }
   localStorage.setItem(SESSION_KEY, JSON.stringify(session))
   return session
 }
 
+// Reads the signed-in user, or null when nobody is logged in.
 export function getSession() {
   return readJson(SESSION_KEY, null)
 }
 
+// Clears the signed-in user. Saved accounts stay in localStorage.
 export function logout() {
   localStorage.removeItem(SESSION_KEY)
 }
 
+// Parses a localStorage value. A bad or missing value returns the fallback.
 function readJson(key, fallback) {
   try {
     const raw = localStorage.getItem(key)

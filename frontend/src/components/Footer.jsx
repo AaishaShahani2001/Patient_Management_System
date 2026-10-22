@@ -1,3 +1,4 @@
+// Site footer shown under every page.
 const links = [
   { href: '#privacy', label: 'Privacy Policy' },
   { href: '#terms', label: 'Terms of Service' },
@@ -5,6 +6,7 @@ const links = [
 ]
 
 export default function Footer() {
+  // Copyright on the left, policy links on the right. They stack on a narrow screen.
   return (
     <footer className="flex shrink-0 flex-col gap-2 border-t border-slate-100 bg-white px-5 py-3.5 text-[13px] text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-10">
       <p>© 2026 MediCare. All rights reserved.</p>

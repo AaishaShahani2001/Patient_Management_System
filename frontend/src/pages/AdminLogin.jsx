@@ -1,3 +1,4 @@
+// Admin login. A matching localStorage account opens the admin dashboard.
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import background from '../assets/pms.jpeg'
@@ -7,6 +8,7 @@ import { getSession, login } from '../auth'
 const fieldClass =
   'h-11 w-full rounded-lg border border-slate-200 bg-white text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#2F6FED] focus:ring-2 focus:ring-[#2F6FED]/20'
 
+// Small icons used inside the email and password fields.
 function MailIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -27,17 +29,20 @@ function LockIcon() {
 
 export default function AdminLogin() {
   const navigate = useNavigate()
+  // Form fields, password visibility, and the error line.
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
 
+  // Skip this form when a session is already saved.
   useEffect(() => {
     const session = getSession()
     if (session?.role === 'admin') navigate('/admin-dashboard', { replace: true })
     if (session?.role === 'patient') navigate('/patient-dashboard', { replace: true })
   }, [navigate])
 
+  // Only the admin demo account is accepted on this form.
   function handleSubmit(event) {
     event.preventDefault()
     const user = login(email, password, 'admin')
@@ -51,6 +56,7 @@ export default function AdminLogin() {
 
   return (
     <main className="relative flex min-h-[calc(100vh-8rem)] flex-1 items-center justify-center px-4 py-8">
+      {/* Full-page photo behind the form. */}
       <img src={background} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
       <div className="absolute inset-0 bg-slate-900/10" />
 

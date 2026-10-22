@@ -1,12 +1,15 @@
+// Patient home. Sample visits and records are shown after a patient login.
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getSession, logout } from '../auth'
 
+// Sample visits shown on the patient home. They are not saved bookings yet.
 const appointments = [
   { doctor: 'Dr. Mehta', type: 'General checkup', when: '24 Oct 2026, 10:30 AM', status: 'Confirmed' },
   { doctor: 'Dr. Iyer', type: 'Follow-up', when: '02 Nov 2026, 4:00 PM', status: 'Scheduled' },
 ]
 
+// Sample records shown under the visit list.
 const records = [
   { date: '12 Sep 2026', title: 'Blood test', note: 'Results normal' },
   { date: '03 Aug 2026', title: 'Prescription', note: 'Vitamin D, 8 weeks' },
@@ -16,6 +19,7 @@ export default function PatientDashboard() {
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
 
+  // Send anyone who is not a signed-in patient back to the patient login.
   useEffect(() => {
     const session = getSession()
     if (!session || session.role !== 'patient') {
@@ -25,8 +29,10 @@ export default function PatientDashboard() {
     setUser(session)
   }, [navigate])
 
+  // Wait until the session check finishes before painting the page.
   if (!user) return null
 
+  // Clears the session and returns to the patient login.
   function handleLogout() {
     logout()
     navigate('/login', { replace: true })
@@ -50,6 +56,7 @@ export default function PatientDashboard() {
           </button>
         </div>
 
+        {/* Short summary cards under the welcome line. */}
         <section className="mt-6 grid gap-4 sm:grid-cols-3">
           <article className="rounded-2xl bg-white p-5 shadow-sm">
             <p className="text-sm text-slate-500">Patient ID</p>
@@ -65,6 +72,7 @@ export default function PatientDashboard() {
           </article>
         </section>
 
+        {/* Upcoming visits. */}
         <section className="mt-6 rounded-2xl bg-white p-5 shadow-sm">
           <h2 className="text-lg font-semibold text-slate-900">Appointments</h2>
           <ul className="mt-4 divide-y divide-slate-100">
@@ -82,6 +90,7 @@ export default function PatientDashboard() {
           </ul>
         </section>
 
+        {/* Older tests and prescriptions. */}
         <section className="mt-6 rounded-2xl bg-white p-5 shadow-sm">
           <h2 className="text-lg font-semibold text-slate-900">Recent records</h2>
           <ul className="mt-4 divide-y divide-slate-100">

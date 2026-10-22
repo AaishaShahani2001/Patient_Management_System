@@ -1,15 +1,19 @@
+// Top bar. Home and Doctors stay visible. The right button depends on who is logged in.
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import logo from '../assets/medicare_logo.png'
 import { getSession } from '../auth'
 
+// Links that stay in the bar for every visitor.
 const tabs = [
   { to: '/', label: 'Home' },
   { to: '/doctors', label: 'Doctors' },
 ]
 
 export default function Navbar() {
+  // Reading the path makes this bar update after login and logout change the route.
   const { pathname } = useLocation()
   const session = getSession()
+  // Signed-in users see their dashboard link. Everyone else sees Sign Up.
   const dashboard =
     session?.role === 'admin'
       ? { to: '/admin-dashboard', label: 'Admin Dashboard' }
@@ -24,6 +28,7 @@ export default function Navbar() {
           <img src={logo} alt="MediCare" className="h-10 w-auto bg-[#f5f9fa] sm:h-[52px]" />
         </Link>
 
+        {/* Home is also active on /login, because that path is the same screen. */}
         <nav className="flex items-center gap-3 sm:gap-6">
           {tabs.map((tab) => (
             <NavLink

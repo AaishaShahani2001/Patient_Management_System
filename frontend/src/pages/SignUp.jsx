@@ -1,9 +1,12 @@
+// Patient sign-up form. Values stay on this page until a save step is added.
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import background from '../assets/pms.jpeg'
 
+// Choices for the blood group dropdown.
 const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
 
+// Choices for the gender dropdown.
 const genders = [
   { value: 'M', label: 'M' },
   { value: 'FM', label: 'FM' },
@@ -13,6 +16,7 @@ const genders = [
 const fieldClass =
   'h-11 w-full rounded-lg border border-slate-200 bg-white text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#2F6FED] focus:ring-2 focus:ring-[#2F6FED]/20'
 
+// Small icons used beside the sign-up fields.
 function MailIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -52,6 +56,7 @@ function PhoneIcon() {
 }
 
 export default function SignUp() {
+  // One piece of state for each field on the form.
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [contact, setContact] = useState('')
@@ -61,16 +66,19 @@ export default function SignUp() {
   const [gender, setGender] = useState('')
   const [photoName, setPhotoName] = useState('')
 
+  // Stops the browser refresh. Account creation is not wired up yet.
   function handleSubmit(event) {
     event.preventDefault()
   }
 
+  // Keeps the chosen file name so the form can show it.
   function handlePhoto(event) {
     setPhotoName(event.target.files?.[0]?.name ?? '')
   }
 
   return (
     <main className="relative flex flex-1 justify-center px-4 py-8">
+      {/* Full-page photo behind the form. */}
       <img src={background} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
       <div className="absolute inset-0 bg-slate-900/15" />
 
@@ -81,6 +89,7 @@ export default function SignUp() {
         <h1 className="text-[26px] font-bold leading-tight text-slate-900">Create Your Account</h1>
         <p className="mt-1.5 text-[13.5px] text-slate-500">Join the Medicare Hospital and Patient Portal.</p>
 
+        {/* Name, email, phone, password, blood group, gender, and photo. */}
         <div className="mt-5 grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
           <div>
             <label htmlFor="fullName" className="block text-[13px] font-medium text-slate-700">

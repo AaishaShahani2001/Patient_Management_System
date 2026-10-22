@@ -1,3 +1,4 @@
+// Lint rules for the React source files. The build output folder is ignored.
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'

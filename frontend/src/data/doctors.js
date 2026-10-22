@@ -1,3 +1,4 @@
+// Extra specialty names and doctor profiles. The live doctors page uses its own list in pages/Doctors.jsx.
 export const CATEGORIES = [
     "General Physician",
     "Dermatology",
@@ -7,6 +8,7 @@ export const CATEGORIES = [
     "Neurology",
 ];
 
+// Sample profiles grouped by the categories above. Not used by the current doctors page.
 export const DOCTORS = [
     {
         id: "d1",

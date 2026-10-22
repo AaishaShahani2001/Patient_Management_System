@@ -1,11 +1,14 @@
+// Doctor list. Search and specialty filters run in the browser, then Book Appointment opens the booking page.
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import doc1 from '../assets/doc1.png'
 import doc2 from '../assets/doc2.png'
 import doc3 from '../assets/doc3.png'
 import doc4 from '../assets/doc4.png'
 import doc5 from '../assets/doc5.png'
 
-const doctors = [
+// Shared with the booking page so a card and its profile use the same doctor.
+export const doctors = [
   {
     id: 'sarah',
     name: 'Dr. Sarah Jenkins',
@@ -17,6 +20,8 @@ const doctors = [
     tags: ['Heart checkup', 'BP care'],
     nextSlot: 'Today, 4:30 PM',
     fee: 'Rs.8000',
+    years: '8 Years',
+    about: 'Dr. Sarah Jenkins focuses on heart checkups and blood pressure care, with clear advice on prevention and follow-up.',
     image: doc2,
     topRated: true,
   },
@@ -31,6 +36,8 @@ const doctors = [
     tags: ['Skin consult', 'Allergy'],
     nextSlot: 'Tomorrow, 11:00 AM',
     fee: 'Rs.6000',
+    years: '6 Years',
+    about: 'Dr. Marcus Vance treats common skin concerns and allergies, and explains each step of care in plain language.',
     image: doc1,
   },
   {
@@ -44,6 +51,8 @@ const doctors = [
     tags: ['Headache', 'Nerve care'],
     nextSlot: 'Today, 6:15 PM',
     fee: 'Rs.9000',
+    years: '10 Years',
+    about: 'Dr. Elena Rostova sees patients for headaches and nerve-related symptoms, and plans treatment around an early diagnosis.',
     image: doc5,
   },
   {
@@ -57,6 +66,8 @@ const doctors = [
     tags: ['Joint pain', 'Sports injury'],
     nextSlot: 'Fri, 9:00 AM',
     fee: 'Rs.7500',
+    years: '7 Years',
+    about: 'Dr. David Kim helps with joint pain and sports injuries, and focuses on practical recovery plans.',
     image: doc3,
   },
   {
@@ -70,12 +81,16 @@ const doctors = [
     tags: ['Child checkup', 'Vaccination'],
     nextSlot: 'Tomorrow, 2:00 PM',
     fee: 'Rs.5000',
+    years: '4 Years',
+    about: 'Dr. Rachel Patel provides child checkups and vaccinations, and keeps visits calm for both children and parents.',
     image: doc4,
   },
 ]
 
+// "All" plus one option for each specialty on the list above.
 const specialties = ['All', ...new Set(doctors.map((doctor) => doctor.specialty))]
 
+// Fills gold stars up to the rounded rating and leaves the rest gray.
 function Stars({ rating }) {
   const full = Math.round(rating)
   return (
@@ -87,10 +102,11 @@ function Stars({ rating }) {
 }
 
 export default function Doctors() {
+  // Search box text and the specialty dropdown.
   const [query, setQuery] = useState('')
   const [specialty, setSpecialty] = useState('All')
-  const [bookedId, setBookedId] = useState(null)
 
+  // Match the search text and the specialty dropdown together.
   const visible = doctors.filter((doctor) => {
     const text = `${doctor.name} ${doctor.specialty} ${doctor.location}`.toLowerCase()
     const matchesQuery = text.includes(query.trim().toLowerCase())
@@ -106,6 +122,7 @@ export default function Doctors() {
           Search by name or specialty and book a visit with a MediCare doctor.
         </p>
 
+        {/* Search by name, specialty, or clinic, then narrow by specialty. */}
         <div className="mt-5 flex flex-col gap-3 rounded-2xl bg-white p-3 shadow-sm sm:flex-row">
           <input
             type="search"
@@ -131,6 +148,7 @@ export default function Doctors() {
           {visible.length} {visible.length === 1 ? 'doctor' : 'doctors'} available
         </p>
 
+        {/* One card per matching doctor. Book Appointment opens that doctor's page. */}
         <ul className="mt-3 space-y-4">
           {visible.map((doctor) => (
             <li key={doctor.id} className="rounded-2xl bg-white p-4 shadow-sm sm:p-5">
@@ -174,25 +192,26 @@ export default function Doctors() {
                     <p className="text-sm font-medium text-slate-800">{doctor.nextSlot}</p>
                     <p className="mt-1 text-lg font-semibold text-emerald-600">{doctor.fee}</p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setBookedId(doctor.id)}
-                    className="h-10 rounded-lg bg-[#2F6FED] px-4 text-sm font-semibold text-white transition hover:bg-[#245ee0]"
+                  <Link
+                    to={`/book-appointment/${doctor.id}`}
+                    className="inline-flex h-10 items-center justify-center rounded-lg bg-[#2F6FED] px-4 text-sm font-semibold text-white transition hover:bg-[#245ee0]"
                   >
-                    {bookedId === doctor.id ? 'Requested' : 'Book Appointment'}
-                  </button>
+                    Book Appointment
+                  </Link>
                 </div>
               </div>
             </li>
           ))}
         </ul>
 
+        {/* Shown only when the search matches nobody. */}
         {visible.length === 0 && (
           <p className="mt-6 rounded-2xl bg-white px-5 py-8 text-center text-sm text-slate-500 shadow-sm">
             No doctors match that search.
           </p>
         )}
 
+        {/* Emergency note. This is a phone link, not an online booking. */}
         <section className="mt-8 rounded-2xl bg-red-600 px-5 py-4 text-white sm:flex sm:items-center sm:justify-between sm:gap-6">
           <div>
             <h2 className="font-semibold">Need emergency care right now?</h2>

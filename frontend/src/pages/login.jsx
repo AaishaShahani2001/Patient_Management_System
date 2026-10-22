@@ -1,8 +1,10 @@
+// Patient login. A matching localStorage account opens the patient dashboard.
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import background from '../assets/pms.jpeg'
 import { getSession, login } from '../auth'
 
+// Small icons used inside the email, password, and admin-login controls.
 function MailIcon() {
     return (
         <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -32,18 +34,21 @@ function UserIcon() {
 
 export default function Login() {
     const navigate = useNavigate()
+    // Form fields, password visibility, the remember checkbox, and the error line.
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [remember, setRemember] = useState(false)
     const [error, setError] = useState('')
 
+    // Skip this form when a session is already saved.
     useEffect(() => {
         const session = getSession()
         if (session?.role === 'patient') navigate('/patient-dashboard', { replace: true })
         if (session?.role === 'admin') navigate('/admin-dashboard', { replace: true })
     }, [navigate])
 
+    // Only the patient demo account is accepted on this form.
     function handleSubmit(event) {
         event.preventDefault()
         const user = login(email, password, 'patient')
@@ -57,6 +62,7 @@ export default function Login() {
 
     return (
             <main className="relative flex min-h-[calc(100vh-8rem)] flex-1 items-center justify-center px-4 py-8">
+                {/* Full-page photo behind the form, with a light dark overlay. */}
                 <img
                     src={background}
                     alt=""
@@ -78,6 +84,7 @@ export default function Login() {
                         Please enter your credentials to access the MediCare portal.
                     </p>
 
+                    {/* Email and password. Show toggles the password between hidden and visible. */}
                     <label htmlFor="email" className="mt-5 block text-[13px] font-medium text-slate-700">
                         Email Address
                     </label>
@@ -137,6 +144,7 @@ export default function Login() {
                         </a>
                     </div>
 
+                    {/* Shown only when the email and password do not match the patient account. */}
                     {error && (
                         <p className="mt-3 text-[13px] text-red-600">{error}</p>
                     )}

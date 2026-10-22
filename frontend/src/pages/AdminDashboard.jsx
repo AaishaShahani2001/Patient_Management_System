@@ -1,3 +1,4 @@
+// Admin home. The patient table is read from the accounts saved in localStorage.
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getSession, getUsers, logout } from '../auth'
@@ -7,6 +8,7 @@ export default function AdminDashboard() {
   const [user, setUser] = useState(null)
   const [patients, setPatients] = useState([])
 
+  // Send anyone who is not a signed-in admin back to the admin login.
   useEffect(() => {
     const session = getSession()
     if (!session || session.role !== 'admin') {
@@ -17,8 +19,10 @@ export default function AdminDashboard() {
     setPatients(getUsers().filter((account) => account.role === 'patient'))
   }, [navigate])
 
+  // Wait until the session check finishes before painting the page.
   if (!user) return null
 
+  // Clears the session and returns to the admin login.
   function handleLogout() {
     logout()
     navigate('/admin-login', { replace: true })
@@ -42,6 +46,7 @@ export default function AdminDashboard() {
           </button>
         </div>
 
+        {/* Counts for patients, today's appointments, and doctors on duty. */}
         <section className="mt-6 grid gap-4 sm:grid-cols-3">
           <article className="rounded-2xl bg-white p-5 shadow-sm">
             <p className="text-sm text-slate-500">Patients</p>
@@ -57,6 +62,7 @@ export default function AdminDashboard() {
           </article>
         </section>
 
+        {/* Patient rows come from the accounts stored in localStorage. */}
         <section className="mt-6 overflow-hidden rounded-2xl bg-white shadow-sm">
           <div className="border-b border-slate-100 px-5 py-4">
             <h2 className="text-lg font-semibold text-slate-900">Patients</h2>
