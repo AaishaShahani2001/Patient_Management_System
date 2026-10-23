@@ -1,7 +1,9 @@
 // Booking page for one doctor. The doctor id comes from the URL.
 import { useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { getSession } from '../auth'
+import { bookAppointment } from '../data/records'
 import { doctors } from './Doctors'
 
 // Evening times shown under the date buttons.
@@ -16,6 +18,8 @@ function upcomingDays() {
       key: date.toDateString(),
       label: date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase(),
       day: date.getDate(),
+      // Same day/month/year shape the appointment lists already use.
+      date: date.toLocaleDateString('en-GB'),
     }
   })
 }
@@ -31,6 +35,7 @@ function VerifiedIcon() {
 }
 
 export default function BookAppointment() {
+  const navigate = useNavigate()
   // Doctor id is the last part of /book-appointment/:doctorId.
   const { doctorId } = useParams()
   const doctor = doctors.find((item) => item.id === doctorId)
@@ -57,10 +62,24 @@ export default function BookAppointment() {
   const day = days.find((item) => item.key === selectedDay)
   const canBook = Boolean(selectedDay && selectedTime)
 
-  // Booking runs only after both a date and a time are chosen.
+  // A signed-in patient gets a saved visit. Both dashboards read that same list.
   function handleBook() {
     if (!canBook || !day) return
+    const session = getSession()
+    if (!session || session.role !== 'patient') {
+      toast.error('Sign in as a patient to book an appointment.')
+      navigate('/login')
+      return
+    }
+    bookAppointment({
+      email: session.email,
+      doctor: doctor.name,
+      type: `${doctor.specialty} consultation`,
+      date: day.date,
+      time: selectedTime,
+    })
     toast.success(`Appointment booked with ${doctor.name} on ${day.label} ${day.day} at ${selectedTime}.`)
+    navigate('/patient-dashboard', { state: { section: 'appointments' } })
   }
 
   return (
