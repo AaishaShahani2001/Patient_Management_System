@@ -220,10 +220,10 @@ export default function Doctors() {
             </p>
           </div>
           <a
-            href="tel:108"
+            href="tel:1990"
             className="mt-3 inline-flex h-10 shrink-0 items-center justify-center rounded-lg bg-white px-4 text-sm font-semibold text-red-600 sm:mt-0"
           >
-            Call 108
+            Call 1990
           </a>
         </section>
       </div>

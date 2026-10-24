@@ -1,6 +1,6 @@
 // Admin view of the same sample record: prescriptions, lab reports, and bill status.
 import { useState } from 'react'
-import { bills, getPaidBillIds, getSlips, isBillPaid, labReports, prescriptions, record } from '../../../data/records'
+import { bills, getPaidBillIds, getSlips, isBillPaid, labReports, prescriptions, record } from '../../data/records'
 
 export default function AdminRecords() {
   // Read paid ids and slips once per render so a return visit shows what the patient just sent.

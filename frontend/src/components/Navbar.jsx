@@ -11,7 +11,7 @@ const tabs = [
 
 export default function Navbar() {
   // Reading the path makes this bar update after login and logout change the route.
-  const { pathname } = useLocation()
+  useLocation()
   const session = getSession()
   // Signed-in users see their dashboard link. Everyone else sees Sign Up.
   const dashboard =
@@ -28,7 +28,7 @@ export default function Navbar() {
           <img src={logo} alt="MediCare" className="h-10 w-auto bg-[#f5f9fa] sm:h-[52px]" />
         </Link>
 
-        {/* Home is also active on /login, because that path is the same screen. */}
+        {/* Home is highlighted only on the home page. */}
         <nav className="flex items-center gap-3 sm:gap-6">
           {tabs.map((tab) => (
             <NavLink
@@ -37,9 +37,7 @@ export default function Navbar() {
               end={tab.to === '/'}
               className={({ isActive }) =>
                 `text-sm font-medium transition ${
-                  isActive || (tab.to === '/' && pathname === '/login')
-                    ? 'text-[#2F6FED]'
-                    : 'text-slate-600 hover:text-[#2F6FED]'
+                  isActive ? 'text-[#2F6FED]' : 'text-slate-600 hover:text-[#2F6FED]'
                 }`
               }
             >

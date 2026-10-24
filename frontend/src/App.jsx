@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Home from './pages/Home.jsx';
 import Login from './pages/login.jsx';
 import SignUp from './pages/SignUp.jsx';
 import AdminLogin from './pages/AdminLogin.jsx';
@@ -28,7 +29,7 @@ export default function App() {
         <Navbar />
         {/* Public pages, doctor booking, and the two dashboards. */}
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/admin-login" element={<AdminLogin />} />
