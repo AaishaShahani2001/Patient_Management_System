@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp.jsx';
 import AdminLogin from './pages/AdminLogin.jsx';
 import PatientDashboard from './pages/PatientDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
+import MedicalRecords from './pages/MedicalRecords.jsx';
 import Doctors from './pages/Doctors.jsx';
 import BookAppointment from './pages/BookAppointment.jsx';
 import { ensureUsers } from './auth';
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/doctors" element={<Doctors />} />
           <Route path="/book-appointment/:doctorId" element={<BookAppointment />} />
           <Route path="/patient-dashboard" element={<PatientDashboard />} />
+          <Route path="/medical-records" element={<MedicalRecords />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>
         <Footer />
